@@ -1,70 +1,440 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Froggy | Opciones</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(180deg, #74c365, #3d8b40);
-            text-align: center;
-        }
+<title>San Valentín 💖</title>
 
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.3);
-            width: 85%;
-            max-width: 350px;
-        }
+<style>
 
-        h2 {
-            margin-bottom: 25px;
-        }
+/* FONDO */
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background:linear-gradient(135deg,#ffb6c1,#ff69b4);
+min-height:100vh;
+overflow:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
+}
 
-        .btn {
-            display: block;
-            background: #4CAF50;
-            color: white;
-            text-decoration: none;
-            padding: 14px;
-            margin: 10px 0;
-            border-radius: 10px;
-            font-size: 18px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
+/* CORAZONES */
+.heart{
+position:fixed;
+bottom:-20px;
+font-size:22px;
+animation:float 6s linear infinite, pulse 1s infinite;
+opacity:0.8;
+pointer-events:none;
+}
 
-        .btn:hover {
-            background: #3a8e3b;
-        }
-    </style>
+@keyframes float{
+0%{transform:translateY(0);}
+100%{transform:translateY(-110vh);}
+}
+
+@keyframes pulse{
+0%{transform:scale(1);}
+50%{transform:scale(1.2);}
+100%{transform:scale(1);}
+}
+
+/* CONTENEDOR */
+.container{
+background:#ffe4ec;
+width:90%;
+max-width:400px;
+padding:20px;
+border-radius:20px;
+text-align:center;
+box-shadow:0 0 15px rgba(0,0,0,0.2);
+z-index:5;
+position:relative;
+}
+
+h1{
+color:#d6336c;
+}
+
+button{
+background:#ff4d88;
+color:white;
+border:none;
+padding:12px;
+border-radius:20px;
+font-size:16px;
+margin:6px 0;
+cursor:pointer;
+width:100%;
+}
+
+button:hover{
+background:#e6005c;
+}
+
+.hidden{
+display:none;
+}
+
+.error{
+color:red;
+}
+
+/* LABERINTO */
+#maze{
+display:grid;
+grid-template-columns:repeat(7,1fr);
+gap:3px;
+margin:15px auto;
+}
+
+.cell{
+width:40px;
+height:40px;
+background:#ffc0cb;
+border-radius:5px;
+}
+
+.wall{
+background:#ff69b4;
+}
+
+.snoopy-img,
+.woodstock-img{
+width:100%;
+height:100%;
+object-fit:contain;
+}
+
+</style>
 </head>
+
 <body>
 
-    <div class="container">
-        <h2>¿A dónde quieres ir?</h2>
+<!-- MUSICA -->
+<iframe
+width="0"
+height="0"
+src="https://www.youtube.com/embed/1nZ5Z6b1zq0?autoplay=1&loop=1&playlist=1nZ5Z6b1zq0"
+allow="autoplay">
+</iframe>
 
-        <a class="btn" 
-           href="https://www.google.com/search?q=froggy+mexico&sca_esv=22aeeb4370cbc6e4&sxsrf=AE3TifO87twPbwgNCXCEUSZrzzcCjdj5lQ%3A1767066212969&source=hp&ei=ZEpTaejXOaPMkPIPqK6A0AM&iflsig=AOw8s4IAAAAAaVNYdCk7-rXP-Rle4XMtlGZcH3Qt1VeT&gs_ssp=eJzj4tVP1zc0TDItz6lKMi82YLRSNaiwME0xTEtKsbQwNrVINDJIsjKoMDUxSjYxtzAxMDCxMDExNfXiTSvKT0-vVMhNrchMzgcAnQkTug&oq=frogg&gs_lp=Egdnd3Mtd2l6IgVmcm9nZyoCCAIyChAjGIAEGCcYigUyChAjGIAEGCcYigUyExAuGIAEGMcBGCcYigUYjgUYrwEyBRAAGIAEMggQLhiABBixAzIFEC4YgAQyBRAAGIAEMgsQLhiABBjHARivATIFEAAYgAQyBRAAGIAESPIpUABYuRtwB3gAkAEAmAF1oAHfBqoBAzAuOLgBA8gBAPgBAZgCD6ACsgeoAgrCAgsQABiABBixAxiDAcICCBAAGIAEGLEDwgIREC4YgAQYsQMY0QMYgwEYxwHCAhQQLhiABBixAxjRAxiDARjHARiKBcICBxAjGCcY6gLCAg0QIxjwBRgnGMkCGOoCwgINECMY8AUYgAQYJxiKBcICEBAuGIAEGMcBGCcYigUYrwHCAhEQLhiABBixAxjHARiOBRivAcICDhAuGIAEGLEDGNEDGMcBwgIOEC4YgAQYsQMYxwEYrwHCAgQQIxgnwgIOEC4YgAQYxwEYjgUYrwHCAgsQLhiABBixAxiDAZgDBfEFsySZmOd1dB2SBwM3LjigB4CHAbIHAzAuOLgHjgfCBwYyLTE0LjHIB0GACAA&sclient=gws-wiz" 
-           target="_blank">
-           Ir a Google
-        </a>
+<!-- CONTENEDOR -->
+<div class="container">
 
-        <a class="btn" 
-           href="https://www.facebook.com/froggymexico/?locale=es_LA" 
-           target="_blank">
-           Ir a Facebook
-        </a>
-    </div>
+<!-- INICIO -->
+<div id="start">
+
+<h1>💗 ¿Quieres empezar? 💗</h1>
+<p>Responde las preguntas 💕</p>
+
+<button onclick="startGame()">Comenzar 💖</button>
+
+</div>
+
+
+<!-- QUIZ -->
+<div id="quiz" class="hidden">
+
+<h1 id="question"></h1>
+
+<div id="options"></div>
+
+<p id="error" class="error"></p>
+
+</div>
+
+
+<!-- LABERINTO -->
+<div id="mazeGame" class="hidden">
+
+<h1>🐶 Ayuda a Snoopy 💛</h1>
+<p>Encuentra a Woodstock</p>
+
+<div id="maze"></div>
+
+<div>
+
+<button onclick="move('up')">⬆️</button>
+<button onclick="move('left')">⬅️</button>
+<button onclick="move('right')">➡️</button>
+<button onclick="move('down')">⬇️</button>
+
+</div>
+
+<p id="mazeMsg"></p>
+
+</div>
+
+
+<!-- FINAL -->
+<div id="final" class="hidden">
+
+<h1>💘 ¿Quieres ser mi San Valentín? 💘</h1>
+
+<p style="font-size:20px;color:#a61c4a;">
+Te amo mucho ❤️
+</p>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* CORAZONES */
+setInterval(()=>{
+
+let heart=document.createElement("div");
+heart.className="heart";
+heart.innerHTML="💖";
+
+heart.style.left=Math.random()*100+"vw";
+heart.style.fontSize=(20+Math.random()*20)+"px";
+heart.style.animationDuration=(4+Math.random()*4)+"s";
+
+document.body.appendChild(heart);
+
+setTimeout(()=>{
+heart.remove();
+},8000);
+
+},350);
+
+
+/* PREGUNTAS */
+const questions=[
+
+{
+q:"¿Día de nuestra primera cita?",
+correct:"1 de diciembre del 2024",
+options:[
+"5 de diciembre del 2024",
+"1 de diciembre del 2024",
+"14 de febrero del 2024",
+"10 de enero del 2025"
+]
+},
+
+{
+q:"¿Lugar de nuestra primera cita?",
+correct:"Macelleria",
+options:[
+"Mandolina",
+"Italianni's",
+"Macelleria",
+"Olive Garden"
+]
+},
+
+{
+q:"¿Cuándo y dónde empezamos a andar?",
+correct:"1 de febrero del 2025 en Mandolina",
+options:[
+"20 de febrero del 2025 en casa",
+"1 de febrero del 2025 en Mandolina",
+"14 de febrero del 2025 en Macelleria",
+"1 de enero del 2025 en Mandolina"
+]
+}
+
+];
+
+let current=0;
+
+
+/* INICIO */
+function startGame(){
+
+hideAll();
+showQuestion();
+
+}
+
+
+/* MOSTRAR PREGUNTA */
+function showQuestion(){
+
+hideAll();
+
+document.getElementById("quiz").classList.remove("hidden");
+
+let q=questions[current];
+
+document.getElementById("question").innerText=q.q;
+
+let opts=shuffle([...q.options]);
+
+let html="";
+
+opts.forEach(o=>{
+
+html+=`<button onclick="check('${o}')">${o}</button>`;
+
+});
+
+document.getElementById("options").innerHTML=html;
+
+document.getElementById("error").innerText="";
+
+}
+
+
+/* VALIDAR */
+function check(ans){
+
+if(ans===questions[current].correct){
+
+current++;
+
+if(current<questions.length){
+
+showQuestion();
+
+}else{
+
+startMaze();
+
+}
+
+}else{
+
+document.getElementById("error").innerText="Intenta otra vez 😘";
+
+}
+
+}
+
+
+/* MEZCLAR */
+function shuffle(a){
+return a.sort(()=>Math.random()-0.5);
+}
+
+
+/* LABERINTO */
+const mazeMap=[
+
+[1,1,1,1,1,1,1],
+[1,0,0,0,1,0,1],
+[1,0,1,0,1,0,1],
+[1,0,1,0,0,0,1],
+[1,0,1,1,1,0,1],
+[1,0,0,0,0,0,1],
+[1,1,1,1,1,1,1]
+
+];
+
+let px=1,py=1;
+let wx=5,wy=5;
+
+
+/* INICIAR LABERINTO */
+function startMaze(){
+
+hideAll();
+document.getElementById("mazeGame").classList.remove("hidden");
+
+drawMaze();
+
+}
+
+
+/* DIBUJAR */
+function drawMaze(){
+
+let html="";
+
+for(let y=0;y<7;y++){
+
+for(let x=0;x<7;x++){
+
+let c="cell";
+
+if(mazeMap[y][x]===1) c+=" wall";
+
+let content="";
+
+if(x===px && y===py){
+
+content=`<img src="https://upload.wikimedia.org/wikipedia/en/5/53/Snoopy_Peanuts.png" class="snoopy-img">`;
+
+}
+
+if(x===wx && y===wy){
+
+content=`<img src="https://upload.wikimedia.org/wikipedia/en/1/14/Woodstock.png" class="woodstock-img">`;
+
+}
+
+html+=`<div class="${c}">${content}</div>`;
+
+}
+
+}
+
+document.getElementById("maze").innerHTML=html;
+
+}
+
+
+/* MOVER */
+function move(dir){
+
+let nx=px,ny=py;
+
+if(dir==="up") ny--;
+if(dir==="down") ny++;
+if(dir==="left") nx--;
+if(dir==="right") nx++;
+
+if(mazeMap[ny][nx]===0){
+
+px=nx;
+py=ny;
+
+drawMaze();
+checkWin();
+
+}
+
+}
+
+
+/* GANAR */
+function checkWin(){
+
+if(px===wx && py===wy){
+
+document.getElementById("mazeMsg").innerText="¡Lo lograste! 💖";
+
+setTimeout(()=>{
+
+hideAll();
+document.getElementById("final").classList.remove("hidden");
+
+},1200);
+
+}
+
+}
+
+
+/* OCULTAR */
+function hideAll(){
+
+["start","quiz","mazeGame","final"].forEach(id=>{
+
+document.getElementById(id).classList.add("hidden");
+
+});
+
+}
+
+</script>
 
 </body>
 </html>
